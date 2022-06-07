@@ -1,6 +1,6 @@
 name: PCL CMake Action
 description: action using for building cmake project which need to install pcl/vtk/qt5
-icon: cloud
+Icon: cloud
 on:
   push:
     branches: [ "master" ]
