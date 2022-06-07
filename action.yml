@@ -1,4 +1,4 @@
-name: CMake
+name: PCL CMake Action
 
 on:
   push:
