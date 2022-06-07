@@ -1,12 +1,12 @@
 name: PCL CMake Action
 description: action using for building cmake project which need to install pcl/vtk/qt5
-Icon: cloud
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+branding:
+  icon: 'cloud'
+  color: 'green'
 
+inputs:
+  dir:
+    description: 'Directory'
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
@@ -19,27 +19,13 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
-    - name: Cache
-      uses: actions/cache@v3.0.4
-      with:
-        # A list of files, directories, and wildcard patterns to cache and restore
-        path: '${{ github.workspace }}/cache'
-        # An explicit key for restoring and saving the cache
-        key: 'cache'
-        # An ordered list of keys to use for restoring stale cache if no cache hit occurred for key. Note `cache-hit` returns false in this case.
-        restore-keys: 'cache'# optional
-        # The chunk size used to split up large files during upload, in bytes
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
       with:
         version: '5.15.2'
         host: 'ubuntu-latest'
         target: 'desktop'
-        dir: '${{ github.workspace }}/qt5/'
+        dir: '${{inputs.dir}}/qt5/'
         install-deps: 'true'
         modules: 'qtwidget'
         cached: 'true'
@@ -51,11 +37,11 @@ jobs:
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -B ${{inputs.dir}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: cmake --build ${{inputs.dir}}/build --config ${{env.BUILD_TYPE}}
 
 #     - name: Test
 #       working-directory: ${{github.workspace}}/build
